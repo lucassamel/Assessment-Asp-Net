@@ -27,7 +27,7 @@ namespace Assessment_Asp_Net
             services.AddControllersWithViews();
 
             services.AddDbContext<PessoaContext>(options => 
-            options.UseSqlServer(Configuration.GetConnectionString("PessoasDb")));
+            options.UseSqlServer(Configuration.GetConnectionString("PessoaDbConn")));
 
         }
 
