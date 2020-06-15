@@ -6,6 +6,23 @@
 
 <h1>Index</h1>
 
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">            
+            <div class="col-md-10">
+                <span>Digite o nome ou parte do nome do Aluno:</span>
+                <input type="text" name="pesquisa">                
+                <input asp-action="Buscar" type="submit" value="Buscar" class="btn-primary" />                
+            </div>
+        </div>
+        
+    </div>
+}
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>
@@ -21,27 +38,42 @@
             <th>
                 @Html.DisplayNameFor(model => model.Aniversario)
             </th>
+            <th>
+                Dias para o aniversário
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sobrenome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Aniversario)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sobrenome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Aniversario)
+                </td>
+                <td>
+                    @{ 
+                        DateTime data = new DateTime(DateTime.Now.Year, item.Aniversario.Month, item.Aniversario.Day);
+                       
+                        if (data < DateTime.Now.Date)
+                            data = data.AddYears(1);
+
+                        double dias = data.Subtract(DateTime.Now.Date).TotalDays;
+                    }
+                    @(dias)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

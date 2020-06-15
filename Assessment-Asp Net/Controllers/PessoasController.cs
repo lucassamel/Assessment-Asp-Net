@@ -14,6 +14,8 @@ namespace Assessment_Asp_Net.Controllers
     {
         private readonly PessoaContext _context;
 
+        PessoaContext db = new PessoaContext();
+
         public PessoasController(PessoaContext context)
         {
             _context = context;
@@ -148,6 +150,30 @@ namespace Assessment_Asp_Net.Controllers
         private bool PessoaExists(int id)
         {
             return _context.Pessoas.Any(e => e.Id == id);
+        }
+
+        public ActionResult Buscar()
+        {
+            string pesquisa = "";
+
+            return View(db.Pessoas.Where(x => x.Nome.Contains(pesquisa) || pesquisa == null).ToList());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> BuscarAsync(string pesquisa)
+        {
+            try
+            {
+                return View(await _context.Pessoas.Where(x => x.Nome.Contains(pesquisa) || pesquisa == null).ToListAsync());
+            }
+            catch
+            {
+
+            }
+
+            return View();
+
         }
     }
 }

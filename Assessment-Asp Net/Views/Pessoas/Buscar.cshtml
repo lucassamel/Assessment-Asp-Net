@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Assessment_Asp_Net.Models.Pessoa>
+
+@{
+    ViewData["Title"] = "Buscar";
+}
+
+<h1>Buscar</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sobrenome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aniversario)
+            </th>
+            <th>
+                Dias para o aniversário
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="3" style="color:red">
+                    Nenhum resultado encontrado
+                </td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sobrenome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Aniversario)
+                    </td>
+                    <td>
+                        @{
+                            DateTime data = new DateTime(DateTime.Now.Year, item.Aniversario.Month, item.Aniversario.Day);
+
+                            if (data < DateTime.Now.Date)
+                                data = data.AddYears(1);
+
+                            double dias = data.Subtract(DateTime.Now.Date).TotalDays;
+                        }
+                        @(dias)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+
+            }
+
+        }
+    </tbody>
+</table>

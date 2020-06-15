@@ -14,5 +14,9 @@ namespace Assessment_Asp_Net.Data
         {
 
         }
+
+        public PessoaContext()
+        {
+        }
     }
 }
