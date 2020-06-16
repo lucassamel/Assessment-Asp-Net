@@ -21,10 +21,49 @@ namespace Assessment_Asp_Net.Controllers
             _context = context;
         }
 
+        public List<Pessoa> ListaPessoas()
+        {
+            List<Pessoa> listaPessoas = new List<Pessoa>();
+            foreach( var item in db.Pessoas)
+            {
+                listaPessoas.Add(item);
+            }
+
+            
+            return listaPessoas;
+        }
+
+        public double CalcularAniversario (DateTime niver)
+        {
+            DateTime data = new DateTime(DateTime.Now.Year, niver.Month, niver.Day);
+
+            if (data < DateTime.Now.Date)
+                data = data.AddYears(1);
+
+            double dias = data.Subtract(DateTime.Now.Date).TotalDays;
+
+            return dias;
+
+        }
+
         // GET: Pessoas
         public async Task<IActionResult> Index()
-        {
-            return View(await _context.Pessoas.ToListAsync());
+        {          
+            //foreach (var a in _context.Pessoas)
+            //{
+            //    DateTime data = new DateTime(DateTime.Now.Year, a.Aniversario.Month, a.Aniversario.Day);
+
+            //    if (data < DateTime.Now.Date)
+            //        data = data.AddYears(1);
+
+            //    double dias = data.Subtract(DateTime.Now.Date).TotalDays;
+
+            //    a.Dias = dias;             
+            //}
+
+            return View(await _context.Pessoas.OrderBy(x => x.Aniversario)
+                .ThenBy(x => x.Aniversario.Month)
+                .ThenBy(x => x.Aniversario.Day).ToListAsync());
         }
 
         // GET: Pessoas/Details/5
@@ -175,5 +214,12 @@ namespace Assessment_Asp_Net.Controllers
             return View();
 
         }
+
+        public async Task<IActionResult> AniversariantesToday()
+        {
+            return View(await _context.Pessoas.ToListAsync());
+        }
+
+        
     }
 }

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Pessoas Cadastradas</h1>
 
 
 @using (Html.BeginForm())
@@ -73,6 +73,64 @@
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Aniversariantes do Dia</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sobrenome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aniversario)
+            </th>
+            <th>
+                Dias para o aniversário
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+        <tr>
+            @{
+                DateTime data = new DateTime(DateTime.Now.Year, item.Aniversario.Month, item.Aniversario.Day);
+
+                if (data < DateTime.Now.Date)
+                    data = data.AddYears(1);
+
+                double dias = data.Subtract(DateTime.Now.Date).TotalDays;
+            }
+            @if (dias == 0)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sobrenome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Aniversario)
+                </td>
+                <td>
+
+                    @(dias)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            }
             </tr>
         }
     </tbody>
